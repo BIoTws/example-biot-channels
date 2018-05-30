@@ -9,6 +9,6 @@
   "author": "xJeneK",
   "license": "ISC",
   "dependencies": {
-    "biot-core": "^0.0.4"
+    "biot-core": "^0.0.9"
   }
 }

@@ -14,7 +14,7 @@ async function start() {
 	if (list.length) {
 		let isSent = false;
 		console.error('start recovery');
-		let channel = channelsManager.recoveryChannel(list[0]);
+		let channel = channelsManager.restoreChannel(list[0]);
 		channel.events.on('error', error => {
 			console.error('channelError', channel.id, error);
 		});

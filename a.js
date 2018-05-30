@@ -11,14 +11,14 @@ async function start() {
 	const device = require('byteballcore/device');
 	let myDeviceAddress = device.getMyDeviceAddress();
 	let wallets = await biotCore.getMyDeviceWallets();
-	let arrAddresses = await biotCore.getAddressesInWallet(wallets[0])
+	let arrAddresses = await biotCore.getAddressesInWallet(wallets[0]);
 
 	await biotCore.addCorrespondent(peerPairingCode);
 
 	const channelsManager = new ChannelsManager(wallets[0]);
 	let list = await channelsManager.list();
 	if (list.length) {
-		let channel = channelsManager.recoveryChannel(list[0]);
+		let channel = channelsManager.restoreChannel(list[0]);
 		channel.events.on('error', error => {
 			console.error('channelError', channel.id, error);
 		});
@@ -32,7 +32,7 @@ async function start() {
 		channel.events.on('new_transfer', async (amount) => {
 			console.error('new_transfer: ', amount);
 			console.error('transfer', await channel.transfer(15));
-			console.error('close', await channel.mutualClosure());
+			console.error('close', await channel.closeMutually());
 		});
 		await channel.init();
 		console.error('transfer', await channel.transfer(10));
@@ -59,7 +59,7 @@ async function start() {
 		channel.events.on('new_transfer', async (amount) => {
 			console.error('new_transfer: ', amount);
 			console.error('transfer', await channel.transfer(15));
-			console.error('close', await channel.mutualClosure());
+			console.error('close', await channel.closeMutually());
 		});
 		console.error('init', await channel.init());
 		console.error('test', channel.info());
