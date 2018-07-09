@@ -1,14 +1,14 @@
 const biotCore = require('biot-core');
 const ChannelsManager = require('biot-core/lib/ChannelsManager');
 
-let minAmount = 5000;
+const timeout = 20000; // 20 sec
+const minAmount = 5000;
 
 async function start() {
 	await biotCore.init('test');
 	let wallets = await biotCore.getMyDeviceWallets();
-	let arrAddresses = await biotCore.getAddressesInWallet(wallets[0]);
 
-	const channelsManager = new ChannelsManager(wallets[0]);
+	const channelsManager = new ChannelsManager(wallets[0], timeout);
 	let list = await channelsManager.list();
 	console.error('list', list);
 	if (list.length) {
@@ -37,9 +37,9 @@ async function start() {
 		// console.error('channel', channel);
 		console.error(channel.info());
 	} else {
-		let balance = await biotCore.getAddressBalance(arrAddresses[0]);
+		let balance = await biotCore.getWalletBalance(wallets[0]);
 		console.error('balance', balance);
-		if (balance.base.stable < minAmount) {
+		if ((balance.base.stable + balance.base.pending) < minAmount) {
 			return console.error('Please use the faucet or replenish your account')
 		}
 
